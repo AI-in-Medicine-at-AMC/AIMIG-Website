@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AIMIG — Artificial Intelligence in Medicine Interest Group</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+
+  <style>
+    /* =============================================
+       CSS VARIABLES — the color palette and fonts
+       Think of these like global settings. Change
+       one variable and it updates everywhere.
+    ============================================= */
+    :root {
+      --bg:        #050810;
+      --bg2:       #090d1a;
+      --bg3:       #0d1220;
+      --accent:    #00c8ff;
+      --accent2:   #0066ff;
+      --glow:      rgba(0, 200, 255, 0.15);
+      --text:      #e8edf5;
+      --muted:     #6b7a99;
+      --border:    rgba(0, 200, 255, 0.12);
+      --font-head: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    /* =============================================
+       RESET & BASE STYLES
+       Browsers have default styles we need to
+       clear so everything looks consistent.
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }  /* This enables smooth scrolling between sections */
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       BACKGROUND GRID EFFECT
+       Creates the subtle tech-grid texture you
+       see in the background of the whole page.
+    ============================================= */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* =============================================
+       NAVIGATION BAR
+       Fixed to the top so it stays visible as
+       you scroll. backdrop-filter creates the
+       frosted glass blur effect.
+    ============================================= */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(5, 8, 16, 0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .nav-logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    /* The 'a' selector targets all link elements */
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    /* ::after creates a pseudo-element — an invisible
+       underline that slides in on hover */
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* =============================================
+       HERO SECTION
+       The first thing visitors see. Full viewport
+       height, centered content, with animated
+       gradient orbs in the background.
+    ============================================= */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* The glowing orbs in the background — 
+       pure CSS circles with blur and animation */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .hero-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,102,255,0.3), transparent);
+      top: -100px; left: -100px;
+      animation-delay: 0s;
+    }
+
+    .hero-orb-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,200,255,0.25), transparent);
+      bottom: -50px; right: -50px;
+      animation-delay: -4s;
+    }
+
+    /* @keyframes defines the animation sequence */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50%       { transform: translateY(-30px) scale(1.05); }
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(0, 200, 255, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero h1 {
+      font-family: var(--font-head);
+      font-size: clamp(3rem, 8vw, 6.5rem); /* clamp = responsive font size */
+      font-weight: 800;
+      line-height: 1.0;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    /* Gradient text effect on the acronym */
+    .hero h1 .gradient-text {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 60%, #a855f7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--muted);
+      font-weight: 300;
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-subtitle span {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    /* Primary button style */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 30px rgba(0, 200, 255, 0.2);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(0, 200, 255, 0.4);
+    }
+
+    /* Ghost/outline button style */
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 500;
+      font-size: 0.9rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--glow);
+    }
+
+    /* Stats strip below hero buttons */
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 5rem;
+      animation: fadeUp 0.8s ease 0.5s both;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: var(--font-head);
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* =============================================
+       SECTION SHARED STYLES
+       All content sections share these base styles
+    ============================================= */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 7rem 2rem;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 580px;
+      font-weight: 300;
+    }
+
+    /* Horizontal divider line */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* =============================================
+       ABOUT SECTION
+    ============================================= */
+    #about {
+      background: var(--bg2);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-pillars {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Each pillar card */
+    .pillar {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      padding: 1.5rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .pillar:hover {
+      border-color: rgba(0, 200, 255, 0.3);
+      transform: translateX(6px);
+      box-shadow: -4px 0 20px var(--glow);
+    }
+
+    .pillar-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+      width: 48px; height: 48px;
+      background: var(--glow);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pillar-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.3rem;
+      color: var(--text);
+    }
+
+    .pillar-text {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* =============================================
+       RESOURCES SECTION
+       Tab-based layout with animated content swap
+    ============================================= */
+    #resources {
+      background: var(--bg);
+    }
+
+    .resources-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    /* Tab buttons to switch resource categories */
+    .tab-group {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.4rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1.2rem;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent2), var(--accent));
+      color: #fff;
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text);
+      background: var(--glow);
+    }
+
+    /* Resource tab panels — hidden by default */
+    .tab-panel { display: none; }
+    .tab-panel.active {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    /* Individual resource cards */
+    .resource-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.8rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Glow sweep on hover */
+    .resource-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,200,255,0.05), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .resource-card:hover::before { left: 100%; }
+
+    .resource-card:hover {
+      border-color: rgba(0, 200, 255, 0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .resource-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: var(--glow);
+      border: 1px solid var(--border);
+      padding: 0.2rem 0.7rem;
+      border-radius: 100px;
+      width: fit-content;
+    }
+
+    .resource-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 1.3;
+    }
+
+    .resource-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .resource-link {
+      font-size: 0.82rem;
+      color: var(--accent);
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    /* =============================================
+       EVENTS SECTION
+    ============================================= */
+    #events {
+      background: var(--bg2);
+    }
+
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .event-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2rem;
+      align-items: center;
+      padding: 2rem 2.5rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .event-card:hover {
+      border-color: rgba(0, 200, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+
+    .event-date {
+      text-align: center;
+      min-width: 60px;
+    }
+
+    .event-month {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .event-day {
+      font-family: var(--font-head);
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .event-title {
+      font-family: var(--font-head);
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .event-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .event-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .badge-upcoming {
+      background: rgba(0, 200, 255, 0.1);
+      border: 1px solid rgba(0, 200, 255, 0.3);
+      color: var(--accent);
+    }
+
+    .badge-soon {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      color: #a855f7;
+    }
+
+    /* =============================================
+       JOIN SECTION
+    ============================================= */
+    #join {
+      background: var(--bg);
+      text-align: center;
+    }
+
+    .join-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .join-form {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: 2.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .join-input {
+      flex: 1;
+      min-width: 220px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85rem 1.2rem;
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .join-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--glow);
+    }
+
+    .join-input::placeholder { color: var(--muted); }
+
+    /* Success message after form submit */
+    .join-success {
+      display: none;
+      margin-top: 1.5rem;
+      color: var(--accent);
+      font-size: 0.95rem;
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-family: var(--font-head);
+      font-weight: 800;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-text {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    /* =============================================
+       SCROLL ANIMATION SYSTEM
+       Elements start invisible and slide up.
+       JavaScript adds .visible when they enter
+       the viewport.
+    ============================================= */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered delay for child elements */
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0.0s; }
+    .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
+    .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
+    .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
+    .reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay: 0.4s; }
+
+    /* =============================================
+       ENTRY ANIMATIONS
+    ============================================= */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =============================================
+       RESPONSIVE — mobile adjustments
+    ============================================= */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .event-card { grid-template-columns: 1fr; gap: 1rem; }
+      footer { flex-direction: column; text-align: center; padding: 2rem; }
+      .hero-stats { gap: 2rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================
+       NAVIGATION
+  =========================================== -->
+  <nav>
+    <div class="nav-logo">AIMIG</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#resources">Resources</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#join">Join</a></li>
+    </ul>
+  </nav>
+
+
+  <!-- ==========================================
+       HERO SECTION
+  =========================================== -->
+  <section class="hero" id="home">
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+
+    <div class="hero-badge">🏥 Albany Medical College</div>
+
+    <h1>
+      <span class="gradient-text">AI</span> is reshaping<br/>medicine.<br/>
+      <span style="color: var(--muted); font-size: 0.6em; font-weight: 400;">Are you ready?</span>
+    </h1>
+
+    <p class="hero-subtitle">
+      <span>AIMIG</span> — Artificial Intelligence in Medicine Interest Group.<br/>
+      Bridging the gap between clinical medicine and emerging technology.
+    </p>
+
+    <div class="hero-cta">
+      <a href="#join" class="btn-primary">Join the Group →</a>
+      <a href="#resources" class="btn-ghost">Explore Resources</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">Members</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">3</div>
+        <div class="stat-label">Focus Areas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Curiosity</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+
+  <!-- ==========================================
+       ABOUT SECTION
+  =========================================== -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="reveal">
+          <p class="section-label">Who We Are</p>
+          <h2 class="section-title">Medicine meets machine intelligence.</h2>
+          <p class="section-desc">
+            AIMIG is Albany Medical College's student-led organization dedicated to exploring the intersection of artificial intelligence and clinical medicine. We believe every future physician should understand the tools reshaping healthcare.
+          </p>
+          <br/>
+          <p class="section-desc">
+            Whether you want to <strong style="color:var(--text)">understand AI</strong>, apply it clinically, or <strong style="color:var(--text)">build with it</strong> — this is your starting point.
+          </p>
+        </div>
+
+        <div class="about-pillars reveal-stagger">
+          <div class="pillar">
+            <div class="pillar-icon">🔬</div>
+            <div>
+              <div class="pillar-title">Clinical Understanding</div>
+              <div class="pillar-text">Learn how AI is being used in diagnostics, imaging, pathology, and patient care right now.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">🧠</div>
+            <div>
+              <div class="pillar-title">Critical Thinking</div>
+              <div class="pillar-text">Understand the limitations, biases, and ethical challenges of AI in medicine — not just the hype.</div>
+            </div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-icon">💻</div>
+            <div>
+              <div class="pillar-title">Hands-On Building</div>
+              <div class="pillar-text">For those who want to go deeper — workshops, coding sessions, and research opportunities.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+
+  <!-- ==========================================
+       RESOURCES SECTION
+  =========================================== -->
+  <section id="resources">
+    <div class="container">
+      <div class="resources-header reveal">
+        <div>
+          <p class="section-label">Learning Hub</p>
+          <h2 class="section-title">Start wherever you are.</h2>
+        </div>
+        <div class="tab-group">
+          <button class="tab-btn active" onclick="switchTab('beginner', this)">Beginner</button>
+          <button class="tab-btn" onclick="switchTab('clinical', this)">Clinical</button>
+          <button class="tab-btn" onclick="switchTab('build', this)">Build</button>
+        </div>
+      </div>
+
+      <!-- BEGINNER TAB -->
+      <div class="tab-panel active" id="tab-beginner">
+        <a href="https://www.youtube.com/watch?v=aircAruvnKk" target="_blank" class="resource-card">
+          <span class="resource-tag">Video</span>
+          <div class="resource-title">But what is a neural network?</div>
+          <div class="resource-desc">3Blue1Brown's legendary visual explanation of how neural networks actually work. No math required. The best starting point on the internet.</div>
+          <div class="resource-link">Watch on YouTube →</div>
+        </a>
+        <a href="https://www.coursera.org/learn/ai-for-everyone" target="_blank" class="resource-card">
+          <span class="resource-tag">Course</span>
+          <div class="resource-title">AI For Everyone — Andrew Ng</div>
+          <div class="resource-desc">A non-technical course designed for people who work with AI, not just engineers. Perfect for future clinicians. Free to audit.</div>
+          <div class="resource-link">Start on Coursera →</div>
+        </a>
+        <a href="https://www.nejm.org/doi/full/10.1056/NEJMra1814259" target="_blank" class="resource-card">
+          <span class="resource-tag">Reading</span>
+          <div class="resource-title">NEJM: AI in Medicine Overview</div>
+          <div class="resource-desc">A foundational review article from the New England Journal of Medicine on how machine learning is being applied across clinical medicine.</div>
+          <div class="resource-link">Read Article →</div>
+        </a>
+        <a href="https://claude.ai" target="_blank" class="resource-card">
+          <span class="resource-tag">Tool</span>
+          <div class="resource-title">Try Claude — AI Assistant</div>
+          <div class="resource-desc">The most capable AI assistant for complex reasoning. Use it to explain medical concepts, study, research, and explore how AI handles clinical questions.</div>
+          <div class="resource-link">Open Claude →</div>
+        </a>
+      </div>
+
+      <!-- CLINICAL TAB -->
+      <div class="tab-panel" id="tab-clinical">
+        <a href="https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices" target="_blank" class="resource-card">
+          <span class="resource-tag">FDA</span>
+          <div class="resource-title">FDA-Approved AI Medical Devices</div>
+          <div class="resource-desc">The official FDA list of AI/ML-enabled medical devices currently approved for clinical use. Covers radiology, cardiology, pathology, and more.</div>
+          <div class="resource-link">View FDA Database →</div>
+        </a>
+        <a href="https://www.nature.com/articles/s41591-019-0508-1" target="_blank" class="resource-card">
+          <span class="resource-tag">Research</span>
+          <div class="resource-title">AI vs. Dermatologists in Skin Cancer</div>
+          <div class="resource-desc">A landmark Nature Medicine study showing deep learning matching or exceeding 58 dermatologists at skin cancer diagnosis — and the limitations that followed.</div>
+          <div class="resource-link">Read Paper →</div>
+        </a>
+        <a href="https://stanfordmlgroup.github.io/projects/chexnet/" target="_blank" class="resource-card">
+          <span class="resource-tag">Radiology</span>
+          <div class="resource-title">CheXNet — AI Chest X-Ray Reading</div>
+          <div class="resource-desc">Stanford's deep learning model for detecting pneumonia from chest X-rays that exceeded radiologist performance. A milestone in clinical AI.</div>
+          <div class="resource-link">Explore Project →</div>
+        </a>
+        <a href="https://www.science.org/doi/10.1126/scitranslmed.aao4633" target="_blank" class="resource-card">
+          <span class="resource-tag">Ethics</span>
+          <div class="resource-title">Dissecting Racial Bias in AI</div>
+          <div class="resource-desc">A critical paper examining how algorithms trained on biased data perpetuate healthcare disparities. Essential reading for every future physician.</div>
+          <div class="resource-link">Read Paper →</div>
+        </a>
+      </div>
+
+      <!-- BUILD TAB -->
+      <div class="tab-panel" id="tab-build">
+        <a href="https://colab.research.google.com" target="_blank" class="resource-card">
+          <span class="resource-tag">Tool</span>
+          <div class="resource-title">Google Colab</div>
+          <div class="resource-desc">Free cloud-based Python environment that runs in your browser. No installation needed. Start writing and running real code in minutes.</div>
+          <div class="resource-link">Open Colab →</div>
+        </a>
+        <a href="https://www.kaggle.com/learn/python" target="_blank" class="resource-card">
+          <span class="resource-tag">Course</span>
+          <div class="resource-title">Python for Beginners — Kaggle</div>
+          <div class="resource-desc">A free, practical Python course specifically designed for data science. Learn the exact skills used to build medical AI models from scratch.</div>
+          <div class="resource-link">Start Learning →</div>
+        </a>
+        <a href="https://teachablemachine.withgoogle.com" target="_blank" class="resource-card">
+          <span class="resource-tag">Interactive</span>
+          <div class="resource-title">Google Teachable Machine</div>
+          <div class="resource-desc">Train a real image classification model in your browser with zero code. Upload images, train, and test — a perfect first hands-on AI experience.</div>
+          <div class="resource-link">Try It Now →</div>
+        </a>
+        <a href="https://huggingface.co/models?pipeline_tag=text-classification&sort=trending" target="_blank" class="resource-card">
+          <span class="resource-tag">Platform</span>
+          <div class="resource-title">Hugging Face — Model Hub</div>
+          <div class="resource-desc">The GitHub of AI models. Thousands of pre-built models including medical NLP, clinical note analysis, and biomedical text classification.</div>
+          <div class="resource-link">Explore Models →</div>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+
+  <!-- ==========================================
+       EVENTS SECTION
+  =========================================== -->
+  <section id="events">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Upcoming Events</p>
+        <h2 class="section-title">Where the learning happens.</h2>
+      </div>
+
+      <div class="events-list reveal-stagger">
+
+        <div class="event-card">
+          <div class="event-date">
+            <div class="event-month">APR</div>
+            <div class="event-day">24</div>
+          </div>
+          <div>
+            <div class="event-title">AI in Medicine 101 — Inaugural Launch Event</div>
+            <div class="event-meta">📍 Albany Medical College &nbsp;·&nbsp; 6:00 PM &nbsp;·&nbsp; Open to all students</div>
+          </div>
+          <span class="event-badge badge-upcoming">Upcoming</span>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date">
+            <div class="event-month">MAY</div>
+            <div class="event-day">08</div>
+          </div>
+          <div>
+            <div class="event-title">Workshop: Your First AI Model — No Code Required</div>
+            <div class="event-meta">📍 Albany Medical College &nbsp;·&nbsp; 5:30 PM &nbsp;·&nbsp; Bring your laptop</div>
+          </div>
+          <span class="event-badge badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="event-card">
+          <div class="event-date">
+            <div class="event-month">MAY</div>
+            <div class="event-day">22</div>
+          </div>
+          <div>
+            <div class="event-title">Journal Club: AI Bias in Clinical Algorithms</div>
+            <div class="event-meta">📍 Albany Medical College &nbsp;·&nbsp; 6:00 PM &nbsp;·&nbsp; Paper distributed in advance</div>
+          </div>
+          <span class="event-badge badge-soon">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+
+  <!-- ==========================================
+       JOIN SECTION
+  =========================================== -->
+  <section id="join">
+    <div class="container">
+      <div class="join-inner reveal">
+        <p class="section-label">Get Involved</p>
+        <h2 class="section-title">Be part of what's next.</h2>
+        <p class="section-desc" style="margin: 0 auto;">
+          Whether you're a first-year with zero coding experience or an MS4 with research under your belt — there's a place for you in AIMIG.
+        </p>
+
+        <div class="join-form">
+          <input class="join-input" type="text" id="join-name" placeholder="Your name" />
+          <input class="join-input" type="email" id="join-email" placeholder="Your Albany Med email" />
+          <button class="btn-primary" onclick="handleJoin()">Join AIMIG →</button>
+        </div>
+
+        <p class="join-success" id="join-success">
+          ✅ You're on the list! We'll be in touch before our first event.
+        </p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ==========================================
+       FOOTER
+  =========================================== -->
+  <footer>
+    <div class="footer-logo">AIMIG</div>
+    <div class="footer-text">Artificial Intelligence in Medicine Interest Group · Albany Medical College · 2025</div>
+    <div class="footer-text">Built by AIMIG Leadership</div>
+  </footer>
+
+
+  <!-- ==========================================
+       JAVASCRIPT
+       Three things happening here:
+       1. Tab switching for resources
+       2. Scroll reveal animations
+       3. Join form handling
+  =========================================== -->
+  <script>
+    // ---- 1. TAB SWITCHING ----
+    // When you click a tab, this function:
+    // - Hides all panels
+    // - Shows the selected one
+    // - Updates button active states
+    function switchTab(tabName, btn) {
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      // Remove active from all buttons
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      // Show selected panel and activate button
+      document.getElementById('tab-' + tabName).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // ---- 2. SCROLL REVEAL ----
+    // IntersectionObserver watches elements and
+    // fires a callback when they enter the viewport.
+    // We then add the 'visible' class to trigger
+    // the CSS transition defined above.
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Stop watching once visible (performance)
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,      // Trigger when 15% of element is visible
+      rootMargin: '0px 0px -50px 0px'  // Slight offset from bottom
+    });
+
+    // Watch all elements with reveal classes
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ---- 3. JOIN FORM ----
+    function handleJoin() {
+      const name = document.getElementById('join-name').value.trim();
+      const email = document.getElementById('join-email').value.trim();
+
+      if (!name || !email) {
+        alert('Please enter both your name and email.');
+        return;
+      }
+
+      // Show success message
+      document.getElementById('join-success').style.display = 'block';
+      document.getElementById('join-name').value = '';
+      document.getElementById('join-email').value = '';
+
+      // In a real deployment you'd send this to a backend or Google Form
+      console.log('New member:', name, email);
+    }
+
+    // ---- 4. NAV SCROLL EFFECT ----
+    // Adds a subtle shadow to the nav when scrolled
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 50) {
+        nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.4)';
+      } else {
+        nav.style.boxShadow = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>
