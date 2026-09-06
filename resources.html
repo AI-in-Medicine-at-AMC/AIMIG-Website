@@ -549,7 +549,7 @@
     </h1>
 
     <p class="hero-subtitle">
-      A CURATED COLLECTION OF AI TOOLS FOR DESIGN, RESEARCH, PRODUCTIVITY, AND BUILDING.
+      A CURATED COLLECTION OF CURRENT AI TOOLS FOR RESEARCH, CLINICAL LEARNING, DESIGN, PRODUCTIVITY, AND BUILDING.
     </p>
   </section>
 
@@ -578,7 +578,7 @@
       <div id="resources-grid" class="tab-panel active reveal">
         <!--
           Categories are defined by the job, not the product shape:
-          — Quick cited Q&A on the open web (not agentic runs)
+          — Quick cited Q&A (open web or literature, not agentic runs)
           — Multi-step agents that browse, gather, or act over time
           — End-to-end shipping of software (code or prompts → product)
           — Still images, UI, and decks (static / slide visuals)
@@ -588,50 +588,83 @@
           — Systematic prompt improvement
         -->
 
-        <!-- Cited Q&A on the open web (single questions, not long agent runs) -->
+        <!-- Cited Q&A (single questions, not long agent runs) -->
         <a class="resource-card" data-category="cited-qa" href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Cited Q&amp;A (open web)</span>
           <div class="resource-title">Perplexity</div>
           <div class="resource-desc">
             <ul>
-              <li>Provides cited, real-time answers with sources</li>
-              <li>Great alternative to traditional search engines</li>
-              <li>Handles complex, nuanced queries with context</li>
+              <li>Cited, real-time answers from the live web</li>
+              <li>Strong default when you need sources, not just a summary</li>
+              <li>Handles nuanced follow-ups without losing the paper trail</li>
+            </ul>
+          </div>
+        </a>
+        <a class="resource-card" data-category="cited-qa" href="https://consensus.app/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Cited Q&amp;A (open web)</span>
+          <div class="resource-title">Consensus</div>
+          <div class="resource-desc">
+            <ul>
+              <li>Answers research questions from peer-reviewed papers only</li>
+              <li>Shows how the literature leans for or against a claim</li>
+              <li>Useful for journal club, evidence checks, and lit review scoping</li>
+            </ul>
+          </div>
+        </a>
+        <a class="resource-card" data-category="cited-qa" href="https://www.openevidence.com/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Cited Q&amp;A (open web)</span>
+          <div class="resource-title">OpenEvidence</div>
+          <div class="resource-desc">
+            <ul>
+              <li>Clinical Q&amp;A grounded in NEJM, JAMA, Cochrane, NCCN, and PubMed</li>
+              <li>Built for point-of-care questions, not open-web chat</li>
+              <li>Free for verified U.S. clinicians — check eligibility as a student or trainee</li>
             </ul>
           </div>
         </a>
 
         <!-- Multi-step: research across sources, autonomous workflows -->
-        <a class="resource-card" data-category="agents" href="https://openclaw.ai/" target="_blank" rel="noopener noreferrer">
+        <a class="resource-card" data-category="agents" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Agents &amp; multi-step work</span>
-          <div class="resource-title">Open Claw</div>
+          <div class="resource-title">ChatGPT Work</div>
           <div class="resource-desc">
             <ul>
-              <li>Aggregates information from multiple sources</li>
-              <li>Useful for quick fact-finding and deep dives</li>
-              <li>Integrates AI reasoning with web results</li>
+              <li>Hands off longer tasks: research, decks, sheets, docs, and plans</li>
+              <li>Uses files, connected tools, and a cloud browser when you need action, not just chat</li>
+              <li>The current successor to standalone Agent / Operator inside ChatGPT</li>
             </ul>
           </div>
         </a>
-        <a class="resource-card" data-category="agents" href="https://www.manus.im/" target="_blank" rel="noopener noreferrer">
+        <a class="resource-card" data-category="agents" href="https://claude.com/product/cowork" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Agents &amp; multi-step work</span>
-          <div class="resource-title">Manus AI</div>
+          <div class="resource-title">Claude Cowork</div>
           <div class="resource-desc">
             <ul>
-              <li>Executes complex multi-step tasks autonomously</li>
-              <li>Works across the web and desktop like a human agent</li>
-              <li>Reduces manual, repetitive workflow overhead</li>
+              <li>Give Claude a goal and it works across files and tools until you have a draft to review</li>
+              <li>Strong for research synthesis, analysis, and polished documents</li>
+              <li>Desktop can use local folders and apps; web and mobile continue work in the cloud</li>
             </ul>
           </div>
         </a>
 
         <!-- Same outcome: shipped software; different path (code vs natural language build) -->
+        <a class="resource-card" data-category="ship-software" href="https://cursor.com/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Ship software &amp; products</span>
+          <div class="resource-title">Cursor</div>
+          <div class="resource-desc">
+            <ul>
+              <li>AI-native editor for building, refactoring, and reviewing real codebases</li>
+              <li>Agent mode searches files, edits across a project, and runs commands</li>
+              <li>The practical starting point if you want to write software, not just generate a demo</li>
+            </ul>
+          </div>
+        </a>
         <a class="resource-card" data-category="ship-software" href="https://www.anthropic.com/claude-code" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Ship software &amp; products</span>
           <div class="resource-title">Claude Code</div>
           <div class="resource-desc">
             <ul>
-              <li>Full codebase awareness for large projects</li>
+              <li>Full codebase awareness for large projects in the terminal or desktop</li>
               <li>Handles complex, multi-file engineering tasks</li>
               <li>Understands context deeply, not just snippets</li>
             </ul>
@@ -639,12 +672,12 @@
         </a>
         <a class="resource-card" data-category="ship-software" href="https://lovable.dev/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Ship software &amp; products</span>
-          <div class="resource-title">Loveable</div>
+          <div class="resource-title">Lovable</div>
           <div class="resource-desc">
             <ul>
               <li>Build full-stack apps from plain English prompts</li>
-              <li>No coding knowledge required to ship real products</li>
-              <li>Rapid iteration from idea to deployed app</li>
+              <li>No coding knowledge required to ship a working prototype</li>
+              <li>Rapid iteration from idea to a live app you can share</li>
             </ul>
           </div>
         </a>
@@ -652,23 +685,34 @@
         <!-- Static / slide visuals (layout, raster, presentations) -->
         <a class="resource-card" data-category="visuals-decks" href="https://www.moda.app/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Visuals &amp; decks</span>
-          <div class="resource-title">Moda App</div>
+          <div class="resource-title">Moda</div>
           <div class="resource-desc">
             <ul>
-              <li>Streamlines design workflows with AI-generated layouts</li>
-              <li>Great for rapid prototyping and mood boarding</li>
-              <li>Reduces time from concept to polished visual</li>
+              <li>AI design agent that builds editable decks, social posts, and docs on a canvas</li>
+              <li>Learns brand from a site or kit instead of dumping a static image</li>
+              <li>Export to PDF, PowerPoint, or PNG after you refine the layout</li>
             </ul>
           </div>
         </a>
         <a class="resource-card" data-category="visuals-decks" href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Visuals &amp; decks</span>
-          <div class="resource-title">Nano Banana</div>
+          <div class="resource-title">Nano Banana 2</div>
           <div class="resource-desc">
             <ul>
-              <li>Fast, high-quality image generation</li>
-              <li>Good for social media assets and creative visuals</li>
-              <li>Intuitive prompting with strong aesthetic output</li>
+              <li>Gemini’s native image model for fast generation and conversational edits</li>
+              <li>Strong at following detailed instructions and keeping a subject consistent</li>
+              <li>Available in the Gemini app — useful for figures, posters, and study visuals</li>
+            </ul>
+          </div>
+        </a>
+        <a class="resource-card" data-category="visuals-decks" href="https://gamma.app/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Visuals &amp; decks</span>
+          <div class="resource-title">Gamma</div>
+          <div class="resource-desc">
+            <ul>
+              <li>Turns a prompt or outline into a shareable presentation in minutes</li>
+              <li>Web-native decks you can send as a link, with PPTX/PDF export on paid plans</li>
+              <li>Faster than rebuilding slides by hand for talks, journal club, and pitches</li>
             </ul>
           </div>
         </a>
@@ -678,7 +722,7 @@
           <div class="resource-desc">
             <ul>
               <li>Drafts outlines and on-slide copy from a topic, notes, or outline</li>
-              <li>Works hand-in-hand with Google Slides in Workspace for real decks</li>
+              <li>Works inside Google Slides for real decks you already share in school</li>
               <li>Iterates on structure and wording without rebuilding everything by hand</li>
             </ul>
           </div>
@@ -689,54 +733,65 @@
           <div class="resource-title">HeyGen</div>
           <div class="resource-desc">
             <ul>
-              <li>Creates realistic talking-head videos from text</li>
-              <li>Excellent for scalable multilingual video content</li>
-              <li>No camera or studio required for professional output</li>
+              <li>Creates realistic talking-head videos from a script</li>
+              <li>Useful for multilingual explainers without a studio</li>
+              <li>A practical choice for teaching clips and club recaps</li>
             </ul>
           </div>
         </a>
-        <a class="resource-card" data-category="video" href="https://deepmind.google/technologies/veo/" target="_blank" rel="noopener noreferrer">
+        <a class="resource-card" data-category="video" href="https://deepmind.google/models/veo/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Video</span>
           <div class="resource-title">Google Veo</div>
           <div class="resource-desc">
             <ul>
-              <li>DeepMind text-to-video generation with strong prompt adherence</li>
-              <li>Cinematic control—style, motion, and shot language from plain text</li>
+              <li>DeepMind text-to-video with strong prompt adherence</li>
+              <li>Cinematic control of style, motion, and shot language from plain text</li>
               <li>High-quality output with native audio in current generations</li>
+            </ul>
+          </div>
+        </a>
+        <a class="resource-card" data-category="video" href="https://runwayml.com/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Video</span>
+          <div class="resource-title">Runway</div>
+          <div class="resource-desc">
+            <ul>
+              <li>Text-to-video and image-to-video with Gen-4.5 as the current flagship</li>
+              <li>More editorial control than a one-shot clip generator</li>
+              <li>Good when you need to iterate on motion, frames, and style</li>
             </ul>
           </div>
         </a>
 
         <a class="resource-card" data-category="speech-sound" href="https://www.wisprflow.ai/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Speech &amp; sound</span>
-          <div class="resource-title">WisprFlow</div>
+          <div class="resource-title">Wispr Flow</div>
           <div class="resource-desc">
             <ul>
-              <li>Ultra-fast dictation across any app on your device</li>
+              <li>Fast dictation that works across apps on your device</li>
               <li>Handles natural speech with high accuracy</li>
-              <li>Huge productivity boost for heavy writers</li>
+              <li>Useful for notes, emails, and drafting when typing is the bottleneck</li>
             </ul>
           </div>
         </a>
-        <a class="resource-card" data-category="speech-sound" href="https://artlist.io/" target="_blank" rel="noopener noreferrer">
+        <a class="resource-card" data-category="speech-sound" href="https://elevenlabs.io/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Speech &amp; sound</span>
-          <div class="resource-title">Artlist</div>
+          <div class="resource-title">ElevenLabs</div>
           <div class="resource-desc">
             <ul>
-              <li>Realistic voice clones for content production</li>
-              <li>Great for multilingual voiceovers and narration</li>
-              <li>Saves studio time with consistent AI voice output</li>
+              <li>Industry-standard text-to-speech, voice cloning, and dubbing</li>
+              <li>Strong multilingual narration for lectures, podcasts, and accessibility</li>
+              <li>Fine-grained control over tone, pacing, and multilingual delivery</li>
             </ul>
           </div>
         </a>
         <a class="resource-card" data-category="speech-sound" href="https://suno.com/" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Speech &amp; sound</span>
-          <div class="resource-title">Suno AI</div>
+          <div class="resource-title">Suno</div>
           <div class="resource-desc">
             <ul>
               <li>Generates full songs with lyrics and instrumentals</li>
-              <li>Wide range of genres and styles available</li>
-              <li>Ideal for background music, ads, and creative projects</li>
+              <li>Wide range of genres and styles</li>
+              <li>Useful for background tracks, recaps, and creative projects</li>
             </ul>
           </div>
         </a>
@@ -746,9 +801,9 @@
           <div class="resource-title">Notion AI</div>
           <div class="resource-desc">
             <ul>
-              <li>Combines docs, tasks, and databases in one place</li>
-              <li>AI can summarize, write, and auto-fill your pages</li>
-              <li>Deeply customizable to fit any workflow</li>
+              <li>Combines docs, tasks, and databases in one workspace</li>
+              <li>AI can summarize, write, and fill pages from existing notes</li>
+              <li>Flexible enough for club ops, research logs, and study systems</li>
             </ul>
           </div>
         </a>
@@ -757,9 +812,9 @@
           <div class="resource-title">NotebookLM</div>
           <div class="resource-desc">
             <ul>
-              <li>Grounds answers strictly in your uploaded documents</li>
-              <li>Ask complex questions across multiple sources at once</li>
-              <li>Generates audio overviews for hands-free learning</li>
+              <li>Grounds answers in the PDFs, notes, and sources you upload</li>
+              <li>Ask questions across multiple papers or lecture decks at once</li>
+              <li>Audio overviews for hands-free review of your own materials</li>
             </ul>
           </div>
         </a>
@@ -768,21 +823,32 @@
           <div class="resource-title">Granola</div>
           <div class="resource-desc">
             <ul>
-              <li>Transcribes and summarizes meetings automatically</li>
+              <li>Transcribes and summarizes meetings without a bot joining the call</li>
               <li>Organizes notes with action items and decisions</li>
-              <li>Works natively on Mac without a meeting bot joining</li>
+              <li>Useful for research meetings, mentoring, and club planning</li>
             </ul>
           </div>
         </a>
 
-        <a class="resource-card" data-category="prompt-quality" href="https://www.promptcowboy.ai/" target="_blank" rel="noopener noreferrer">
+        <a class="resource-card" data-category="prompt-quality" href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener noreferrer">
           <span class="resource-tag">Prompt quality &amp; iteration</span>
-          <div class="resource-title">Prompt Cowboy</div>
+          <div class="resource-title">Anthropic Prompting Guide</div>
           <div class="resource-desc">
             <ul>
-              <li>Tests and iterates prompts to maximize AI output quality</li>
-              <li>Great for power users who rely heavily on AI tools</li>
-              <li>Saves time finding the best phrasing for any task</li>
+              <li>Current prompting practices for Claude, including examples and structure</li>
+              <li>Covers clarity, few-shot examples, XML tags, and agentic workflows</li>
+              <li>A durable skill — better prompts transfer across tools, not just one chatbot</li>
+            </ul>
+          </div>
+        </a>
+        <a class="resource-card" data-category="prompt-quality" href="https://openai.com/academy/prompting/" target="_blank" rel="noopener noreferrer">
+          <span class="resource-tag">Prompt quality &amp; iteration</span>
+          <div class="resource-title">OpenAI Prompting Guide</div>
+          <div class="resource-desc">
+            <ul>
+              <li>Official ChatGPT prompting guidance: goal, context, output, and boundaries</li>
+              <li>Practical patterns for clearer tasks, better drafts, and iterative follow-ups</li>
+              <li>Written for everyday use, not just API developers</li>
             </ul>
           </div>
         </a>
