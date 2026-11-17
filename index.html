@@ -905,9 +905,9 @@
           <h2 class="section-title">Start wherever you are.</h2>
         </div>
         <div class="tab-group">
-          <button class="tab-btn active" onclick="switchTab('beginner', this)">Beginner</button>
-          <button class="tab-btn" onclick="switchTab('clinical', this)">Clinical</button>
-          <button class="tab-btn" onclick="switchTab('build', this)">Build</button>
+          <button class="tab-btn active" aria-pressed="true" aria-controls="tab-beginner" onclick="switchTab('beginner', this)">Beginner</button>
+          <button class="tab-btn" aria-pressed="false" aria-controls="tab-clinical" onclick="switchTab('clinical', this)">Clinical</button>
+          <button class="tab-btn" aria-pressed="false" aria-controls="tab-build" onclick="switchTab('build', this)">Build</button>
         </div>
       </div>
 
@@ -1124,11 +1124,15 @@
     function switchTab(tabName, btn) {
       // Hide all panels
       document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      // Remove active from all buttons
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      // Reset active and pressed states on all buttons
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
       // Show selected panel and activate button
       document.getElementById('tab-' + tabName).classList.add('active');
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
     }
 
     // ---- 2. SCROLL REVEAL ----
