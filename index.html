@@ -440,14 +440,20 @@
     }
 
     .tab-panel:not([hidden]) ~ .tab-panel:not([hidden]) {
-      margin-top: 1.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .learning-path-title {
+      grid-column: 1 / -1;
+      font-family: var(--font-head);
+      font-size: 1.125rem;
     }
 
     .tab-panel.active {
       animation: fadeUp 0.4s ease both;
     }
 
-    .tab-group[hidden], .tab-panel[hidden] {
+    .tab-group[hidden], .tab-panel[hidden], .tab-panel.active > .learning-path-title {
       display: none;
     }
 
@@ -929,6 +935,7 @@
 
       <!-- BEGINNER TAB -->
       <div class="tab-panel" id="tab-beginner">
+        <h3 class="learning-path-title">Beginner</h3>
         <a href="https://www.youtube.com/watch?v=aircAruvnKk" target="_blank" class="resource-card">
           <span class="resource-tag">Video</span>
           <div class="resource-title">But what is a neural network?</div>
@@ -957,6 +964,7 @@
 
       <!-- CLINICAL TAB -->
       <div class="tab-panel" id="tab-clinical">
+        <h3 class="learning-path-title">Clinical</h3>
         <a href="https://www.fda.gov/medical-devices/software-medical-device-samd/artificial-intelligence-and-machine-learning-aiml-enabled-medical-devices" target="_blank" class="resource-card">
           <span class="resource-tag">FDA</span>
           <div class="resource-title">FDA-Authorized AI Medical Devices</div>
@@ -985,6 +993,7 @@
 
       <!-- BUILD TAB -->
       <div class="tab-panel" id="tab-build">
+        <h3 class="learning-path-title">Build</h3>
         <a href="https://colab.research.google.com" target="_blank" class="resource-card">
           <span class="resource-tag">Tool</span>
           <div class="resource-title">Google Colab</div>
