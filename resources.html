@@ -295,6 +295,10 @@
       margin-bottom: 2rem;
     }
 
+    .resources-toolbar[hidden] {
+      display: none;
+    }
+
     .filter-label {
       font-size: 0.75rem;
       font-weight: 600;
@@ -345,13 +349,10 @@
       display: none !important;
     }
 
-    /* Resource tab panels — hidden by default */
-    .tab-panel { display: none; }
-    .tab-panel.active {
+    #resources-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
-      animation: fadeUp 0.4s ease both;
     }
 
     /* Individual resource cards */
@@ -473,35 +474,15 @@
       color: var(--muted);
     }
 
-    /* =============================================
-       SCROLL ANIMATION SYSTEM
-       Elements start invisible and slide up.
-       JavaScript adds .visible when they enter
-       the viewport.
-    ============================================= */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
+    /* Scroll animations are enabled after the observer is ready. */
+    .reveal-enabled .reveal {
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Staggered delay for child elements */
-    .reveal-stagger > * {
+    .reveal-enabled .reveal:not(.visible) {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transform: translateY(30px);
     }
-
-    .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0.0s; }
-    .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
-    .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
-    .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
-    .reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay: 0.4s; }
 
     /* =============================================
        ENTRY ANIMATIONS
@@ -573,7 +554,7 @@
   =========================================== -->
   <section id="resources">
     <div class="container" style="padding-top: 4rem;">
-      <div class="resources-toolbar reveal">
+      <div class="resources-toolbar reveal" hidden>
         <span class="filter-label" id="category-filter-label">Filter by category</span>
         <div class="tab-group category-filter" role="group" aria-labelledby="category-filter-label">
           <button type="button" class="tab-btn filter-btn active" data-filter="all" title="Show all tools" aria-pressed="true">All</button>
@@ -588,7 +569,7 @@
         </div>
       </div>
 
-      <div id="resources-grid" class="tab-panel active reveal">
+      <div id="resources-grid" class="reveal">
         <!--
           Categories are defined by the job, not the product shape:
           — Quick cited Q&A (open web or literature, not agentic runs)
@@ -885,23 +866,6 @@
        JAVASCRIPT
   =========================================== -->
   <script>
-    // ---- SCROLL REVEAL ----
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.15,
-      rootMargin: '0px 0px -50px 0px'
-    });
-
-    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-      observer.observe(el);
-    });
-
     // ---- NAV SCROLL EFFECT ----
     window.addEventListener('scroll', () => {
       const nav = document.querySelector('nav');
@@ -936,7 +900,27 @@
         if (!btn) return;
         applyFilter(btn.dataset.filter || 'all');
       });
+      filterBar.closest('.resources-toolbar').hidden = false;
     })();
+
+    // ---- SCROLL REVEAL ----
+    if (typeof IntersectionObserver === 'function') {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.reveal').forEach(el => {
+        observer.observe(el);
+      });
+      document.documentElement.classList.add('reveal-enabled');
+    }
   </script>
 
 </body>

@@ -433,13 +433,22 @@
       background: var(--bg2);
     }
 
-    /* Resource tab panels — hidden by default */
-    .tab-panel { display: none; }
-    .tab-panel.active {
+    .tab-panel {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 1.5rem;
+    }
+
+    .tab-panel:not([hidden]) ~ .tab-panel:not([hidden]) {
+      margin-top: 1.5rem;
+    }
+
+    .tab-panel.active {
       animation: fadeUp 0.4s ease both;
+    }
+
+    .tab-group[hidden], .tab-panel[hidden] {
+      display: none;
     }
 
     /* Individual resource cards */
@@ -737,35 +746,29 @@
       color: var(--muted);
     }
 
-    /* =============================================
-       SCROLL ANIMATION SYSTEM
-       Elements start invisible and slide up.
-       JavaScript adds .visible when they enter
-       the viewport.
-    ============================================= */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
+    /* Scroll animations are enabled after the observer is ready. */
+    .reveal-enabled .reveal {
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .reveal-enabled .reveal:not(.visible) {
+      opacity: 0;
+      transform: translateY(30px);
     }
 
-    /* Staggered delay for child elements */
-    .reveal-stagger > * {
-      opacity: 0;
-      transform: translateY(20px);
+    .reveal-enabled .reveal-stagger > * {
       transition: opacity 0.6s ease, transform 0.6s ease;
     }
 
-    .reveal-stagger.visible > *:nth-child(1) { opacity:1; transform:translateY(0); transition-delay: 0.0s; }
-    .reveal-stagger.visible > *:nth-child(2) { opacity:1; transform:translateY(0); transition-delay: 0.1s; }
-    .reveal-stagger.visible > *:nth-child(3) { opacity:1; transform:translateY(0); transition-delay: 0.2s; }
-    .reveal-stagger.visible > *:nth-child(4) { opacity:1; transform:translateY(0); transition-delay: 0.3s; }
-    .reveal-stagger.visible > *:nth-child(5) { opacity:1; transform:translateY(0); transition-delay: 0.4s; }
+    .reveal-enabled .reveal-stagger:not(.visible) > * {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .reveal-stagger.visible > :nth-child(2) { transition-delay: 0.1s; }
+    .reveal-stagger.visible > :nth-child(3) { transition-delay: 0.2s; }
+    .reveal-stagger.visible > :nth-child(4) { transition-delay: 0.3s; }
+    .reveal-stagger.visible > :nth-child(5) { transition-delay: 0.4s; }
 
     /* =============================================
        ENTRY ANIMATIONS
@@ -917,15 +920,15 @@
           <p class="section-label">Learning Hub</p>
           <h2 class="section-title">Start wherever you are.</h2>
         </div>
-        <div class="tab-group">
-          <button class="tab-btn active" aria-pressed="true" aria-controls="tab-beginner" onclick="switchTab('beginner', this)">Beginner</button>
-          <button class="tab-btn" aria-pressed="false" aria-controls="tab-clinical" onclick="switchTab('clinical', this)">Clinical</button>
-          <button class="tab-btn" aria-pressed="false" aria-controls="tab-build" onclick="switchTab('build', this)">Build</button>
+        <div class="tab-group" hidden>
+          <button class="tab-btn active" aria-pressed="true" aria-controls="tab-beginner">Beginner</button>
+          <button class="tab-btn" aria-pressed="false" aria-controls="tab-clinical">Clinical</button>
+          <button class="tab-btn" aria-pressed="false" aria-controls="tab-build">Build</button>
         </div>
       </div>
 
       <!-- BEGINNER TAB -->
-      <div class="tab-panel active" id="tab-beginner">
+      <div class="tab-panel" id="tab-beginner">
         <a href="https://www.youtube.com/watch?v=aircAruvnKk" target="_blank" class="resource-card">
           <span class="resource-tag">Video</span>
           <div class="resource-title">But what is a neural network?</div>
@@ -1130,46 +1133,45 @@
   =========================================== -->
   <script>
     // ---- 1. TAB SWITCHING ----
-    // When you click a tab, this function:
-    // - Hides all panels
-    // - Shows the selected one
-    // - Updates button active states
-    function switchTab(tabName, btn) {
-      // Hide all panels
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-      // Reset active and pressed states on all buttons
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        b.classList.remove('active');
-        b.setAttribute('aria-pressed', 'false');
+    const tabGroup = document.querySelector('#resources .tab-group');
+    const tabButtons = tabGroup.querySelectorAll('.tab-btn');
+
+    function selectTab(selectedButton) {
+      tabButtons.forEach(button => {
+        const selected = button === selectedButton;
+        const panel = document.getElementById(button.getAttribute('aria-controls'));
+
+        button.classList.toggle('active', selected);
+        button.setAttribute('aria-pressed', String(selected));
+        panel.hidden = !selected;
+        panel.classList.toggle('active', selected);
       });
-      // Show selected panel and activate button
-      document.getElementById('tab-' + tabName).classList.add('active');
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed', 'true');
     }
 
-    // ---- 2. SCROLL REVEAL ----
-    // IntersectionObserver watches elements and
-    // fires a callback when they enter the viewport.
-    // We then add the 'visible' class to trigger
-    // the CSS transition defined above.
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          // Stop watching once visible (performance)
-          observer.unobserve(entry.target);
-        }
-      });
-    }, {
-      threshold: 0.15,      // Trigger when 15% of element is visible
-      rootMargin: '0px 0px -50px 0px'  // Slight offset from bottom
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => selectTab(button));
     });
+    selectTab(tabGroup.querySelector('.tab-btn.active'));
+    tabGroup.hidden = false;
 
-    // Watch all elements with reveal classes
-    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-      observer.observe(el);
-    });
+    // ---- 2. SCROLL REVEAL ----
+    if (typeof IntersectionObserver === 'function') {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+        observer.observe(el);
+      });
+      document.documentElement.classList.add('reveal-enabled');
+    }
 
     // ---- 3. NAV SCROLL EFFECT ----
     // Adds a subtle shadow to the nav when scrolled
