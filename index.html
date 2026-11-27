@@ -33,8 +33,6 @@
     ============================================= */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html { scroll-behavior: smooth; }  /* This enables smooth scrolling between sections */
-
     body {
       background: var(--bg);
       color: var(--text);
@@ -79,7 +77,6 @@
       background: rgba(5, 8, 16, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
-      transition: all 0.3s ease;
     }
 
     .nav-logo {
@@ -147,7 +144,6 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       margin-bottom: 2rem;
-      animation: fadeUp 0.8s ease both;
     }
 
     .hero h1 {
@@ -157,7 +153,6 @@
       line-height: 1.1;
       letter-spacing: 0.02em;
       margin-bottom: 1rem;
-      animation: fadeUp 0.8s ease 0.1s both;
       color: var(--text);
     }
 
@@ -168,7 +163,6 @@
       letter-spacing: 0.05em;
       max-width: 600px;
       margin: 0 auto 2.5rem;
-      animation: fadeUp 0.8s ease 0.2s both;
       line-height: 1.8;
     }
 
@@ -177,7 +171,6 @@
       gap: 1.5rem;
       flex-wrap: wrap;
       justify-content: center;
-      animation: fadeUp 0.8s ease 0.3s both;
     }
 
     /* Primary button style */
@@ -231,7 +224,6 @@
       display: flex;
       gap: 4rem;
       margin-top: 5rem;
-      animation: fadeUp 0.8s ease 0.5s both;
     }
 
     .stat {
@@ -338,7 +330,6 @@
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: 0;
-      transition: all 0.3s ease;
       position: relative;
     }
 
@@ -449,10 +440,6 @@
       font-size: 1.125rem;
     }
 
-    .tab-panel.active {
-      animation: fadeUp 0.4s ease both;
-    }
-
     .tab-group[hidden], .tab-panel[hidden], .tab-panel.active > .learning-path-title {
       display: none;
     }
@@ -556,7 +543,6 @@
       background: var(--bg3);
       border: 1px solid var(--border);
       border-radius: 0;
-      transition: all 0.3s ease;
       position: relative;
     }
 
@@ -750,36 +736,45 @@
       color: var(--muted);
     }
 
-    /* Scroll animations are enabled after the observer is ready. */
-    .reveal-enabled .reveal {
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
+    @media (prefers-reduced-motion: no-preference) {
+      html { scroll-behavior: smooth; }
+      nav, .pillar, .event-card { transition: all 0.3s ease; }
 
-    .reveal-enabled .reveal:not(.visible) {
-      opacity: 0;
-      transform: translateY(30px);
-    }
+      .hero-badge { animation: fadeUp 0.8s ease both; }
+      .hero h1 { animation: fadeUp 0.8s ease 0.1s both; }
+      .hero-subtitle { animation: fadeUp 0.8s ease 0.2s both; }
+      .hero-cta { animation: fadeUp 0.8s ease 0.3s both; }
+      .hero-stats { animation: fadeUp 0.8s ease 0.5s both; }
+      .tab-panel.active { animation: fadeUp 0.4s ease both; }
 
-    .reveal-enabled .reveal-stagger > * {
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
 
-    .reveal-enabled .reveal-stagger:not(.visible) > * {
-      opacity: 0;
-      transform: translateY(20px);
-    }
+      /* Scroll animations are enabled after the observer is ready. */
+      .reveal-enabled .reveal {
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
 
-    .reveal-stagger.visible > :nth-child(2) { transition-delay: 0.1s; }
-    .reveal-stagger.visible > :nth-child(3) { transition-delay: 0.2s; }
-    .reveal-stagger.visible > :nth-child(4) { transition-delay: 0.3s; }
-    .reveal-stagger.visible > :nth-child(5) { transition-delay: 0.4s; }
+      .reveal-enabled .reveal:not(.visible) {
+        opacity: 0;
+        transform: translateY(30px);
+      }
 
-    /* =============================================
-       ENTRY ANIMATIONS
-    ============================================= */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+      .reveal-enabled .reveal-stagger > * {
+        transition: opacity 0.6s ease, transform 0.6s ease;
+      }
+
+      .reveal-enabled .reveal-stagger:not(.visible) > * {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      .reveal-stagger.visible > :nth-child(2) { transition-delay: 0.1s; }
+      .reveal-stagger.visible > :nth-child(3) { transition-delay: 0.2s; }
+      .reveal-stagger.visible > :nth-child(4) { transition-delay: 0.3s; }
+      .reveal-stagger.visible > :nth-child(5) { transition-delay: 0.4s; }
     }
 
     /* =============================================
@@ -1176,21 +1171,39 @@
 
     // ---- 2. SCROLL REVEAL ----
     if (typeof IntersectionObserver === 'function') {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, {
-        rootMargin: '0px 0px -50px 0px'
-      });
+      const motionPreference = window.matchMedia('(prefers-reduced-motion: no-preference)');
+      let observer;
 
-      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
-        observer.observe(el);
-      });
-      document.documentElement.classList.add('reveal-enabled');
+      function updateScrollReveals() {
+        if (!motionPreference.matches) {
+          if (observer) observer.disconnect();
+          document.documentElement.classList.remove('reveal-enabled');
+          return;
+        }
+
+        observer = new IntersectionObserver((entries, revealObserver) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, {
+          rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.reveal:not(.visible), .reveal-stagger:not(.visible)').forEach(el => {
+          observer.observe(el);
+        });
+        document.documentElement.classList.add('reveal-enabled');
+      }
+
+      updateScrollReveals();
+      if (typeof motionPreference.addEventListener === 'function') {
+        motionPreference.addEventListener('change', updateScrollReveals);
+      } else {
+        motionPreference.addListener(updateScrollReveals);
+      }
     }
 
     // ---- 3. NAV SCROLL EFFECT ----
