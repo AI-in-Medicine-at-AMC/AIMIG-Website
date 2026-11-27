@@ -583,6 +583,10 @@
       min-width: 60px;
     }
 
+    .event-date > span {
+      display: block;
+    }
+
     .event-month {
       font-size: 0.7rem;
       font-weight: 600;
@@ -639,12 +643,6 @@
       background: rgba(128, 128, 128, 0.1);
       border: 1px solid var(--muted);
       color: var(--muted);
-    }
-
-    .badge-soon {
-      background: rgba(255, 179, 0, 0.1);
-      border: 1px solid #ffb300;
-      color: #ffb300;
     }
 
     /* =============================================
@@ -1038,64 +1036,65 @@
 
       <div class="events-list reveal-stagger">
         <div class="event-card">
-          <div class="event-date">
-            <div class="event-month">DEC</div>
-            <div class="event-day">3</div>
-          </div>
+          <time class="event-date" datetime="2026-12-03">
+            <span class="event-month">DEC</span>
+            <span class="event-day">3</span>
+          </time>
           <div>
             <div class="event-title">AI in Medicine Conference — Albany Medical College &amp; UAlbany</div>
             <div class="event-meta">📍 MS169 and Neil Hellman Lobby, Albany Medical College &nbsp;·&nbsp; Approx. 9:00 AM–1:00 PM &nbsp;·&nbsp; Invitation only</div>
           </div>
-          <span class="event-badge badge-upcoming">Upcoming</span>
+          <span class="event-badge" hidden></span>
         </div>
 
         <div class="event-card">
-          <div class="event-date">
-            <div class="event-month">NOV</div>
-            <div class="event-day">3</div>
-          </div>
+          <time class="event-date" datetime="2026-11-03">
+            <span class="event-month">NOV</span>
+            <span class="event-day">3</span>
+          </time>
           <div>
             <div class="event-title">How LLMs Work and How to Use Them</div>
             <div class="event-meta">📍 J-305, Albany Medical College &nbsp;·&nbsp; 5:00–6:00 PM &nbsp;·&nbsp; Open to all students and faculty</div>
           </div>
-          <span class="event-badge badge-past">Past</span>
+          <span class="event-badge" hidden></span>
         </div>
 
         <div class="event-card">
-          <div class="event-date">
-            <div class="event-month">OCT</div>
-            <div class="event-day">1</div>
-          </div>
+          <time class="event-date" datetime="2026-10-01">
+            <span class="event-month">OCT</span>
+            <span class="event-day">1</span>
+          </time>
           <div>
             <div class="event-title">AI in Medicine Conference</div>
             <div class="event-meta">📍 ME-700, Albany Medical College &nbsp;·&nbsp; 4:00–8:00 PM &nbsp;·&nbsp; Open to all students and faculty</div>
           </div>
-          <span class="event-badge badge-past">Past</span>
+          <span class="event-badge" hidden></span>
         </div>
 
-        <!-- Template: duplicate this block, fill in details, remove event-card--template -->
+        <!-- Copy a template for a new event. Set datetime to the Albany date (YYYY-MM-DD),
+             update the displayed month, day and details, then remove event-card--template. -->
         <div class="event-card event-card--template">
-          <div class="event-date">
-            <div class="event-month">MAY</div>
-            <div class="event-day">08</div>
-          </div>
+          <time class="event-date" datetime="05-08">
+            <span class="event-month">MAY</span>
+            <span class="event-day">08</span>
+          </time>
           <div>
             <div class="event-title">Workshop: Your First AI Model — No Code Required</div>
             <div class="event-meta">📍 Albany Medical College &nbsp;·&nbsp; 5:30 PM &nbsp;·&nbsp; Bring your laptop</div>
           </div>
-          <span class="event-badge badge-soon">Coming Soon</span>
+          <span class="event-badge" hidden></span>
         </div>
 
         <div class="event-card event-card--template">
-          <div class="event-date">
-            <div class="event-month">MAY</div>
-            <div class="event-day">22</div>
-          </div>
+          <time class="event-date" datetime="05-22">
+            <span class="event-month">MAY</span>
+            <span class="event-day">22</span>
+          </time>
           <div>
             <div class="event-title">Journal Club: AI Bias in Clinical Algorithms</div>
             <div class="event-meta">📍 Albany Medical College &nbsp;·&nbsp; 6:00 PM &nbsp;·&nbsp; Paper distributed in advance</div>
           </div>
-          <span class="event-badge badge-soon">Coming Soon</span>
+          <span class="event-badge" hidden></span>
         </div>
 
       </div>
@@ -1147,10 +1146,10 @@
 
   <!-- ==========================================
        JAVASCRIPT
-       Three things happening here:
        1. Tab switching for resources
        2. Scroll reveal animations
        3. Nav scroll shadow
+       4. Event status badges
   =========================================== -->
   <script>
     // ---- 1. TAB SWITCHING ----
@@ -1204,6 +1203,43 @@
         nav.style.boxShadow = 'none';
       }
     });
+
+    // ---- 4. EVENT STATUS BADGES ----
+    const eventDateFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/New_York',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+
+    function updateEventBadges() {
+      const { year, month, day } = Object.fromEntries(
+        eventDateFormatter.formatToParts(Date.now()).map(({ type, value }) => [type, value])
+      );
+      const today = `${year}-${month}-${day}`;
+
+      document.querySelectorAll('#events .event-card:not(.event-card--template)').forEach(card => {
+        const eventDate = card.querySelector('time.event-date')?.dateTime;
+        const badge = card.querySelector('.event-badge');
+        if (!badge || !/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) return;
+
+        const isPast = eventDate < today;
+        badge.textContent = isPast ? 'Past' : 'Upcoming';
+        badge.classList.toggle('badge-past', isPast);
+        badge.classList.toggle('badge-upcoming', !isPast);
+        badge.hidden = false;
+      });
+    }
+
+    function scheduleEventBadgeUpdates() {
+      // Albany's midnight falls on a UTC minute boundary.
+      setTimeout(scheduleEventBadgeUpdates, 60_000 - (Date.now() % 60_000));
+      updateEventBadges();
+    }
+
+    scheduleEventBadgeUpdates();
+    window.addEventListener('pageshow', updateEventBadges);
+    document.addEventListener('visibilitychange', updateEventBadges);
   </script>
 
 </body>
